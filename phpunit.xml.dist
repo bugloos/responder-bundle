@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
+         backupGlobals="false"
+         cacheResult="false"
+         colors="true"
+         failOnRisky="true"
+         failOnWarning="true"
+         bootstrap="vendor/autoload.php">
+    <php>
+        <ini name="memory_limit" value="-1"/>
+        <ini name="error_reporting" value="-1"/>
+        <server name="APP_ENV" value="test"/>
+        <server name="APP_DEBUG" value="false"/>
+        <server name="KERNEL_CLASS" value="Bugloos\CircuitBreakerBundle\Tests\CircuitBreakerTestKernel"/>
+    </php>
+
+    <testsuites>
+        <testsuite name="Circuit Breaker Bundle Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+
+    <coverage>
+        <include>
+            <directory>src</directory>
+        </include>
+
+        <exclude>
+            <directory>tests</directory>
+            <directory>vendor</directory>
+        </exclude>
+    </coverage>
+</phpunit>

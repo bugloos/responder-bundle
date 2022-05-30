@@ -1,0 +1,67 @@
+stages:
+    - test
+    - build
+
+test:
+    # This file is a template, and might need editing before it works on your project.
+    # Select image from https://hub.docker.com/_/php/
+    image: php:7.4-cli
+    stage: test
+    # Select what we should cache between builds
+    cache:
+        key: ${CI_COMMIT_REF_SLUG}
+        paths:
+            - vendor/
+    coverage: '/^\s*Lines:\s*\d+.\d+\%/'
+    before_script:
+        - apt-get update -yqq
+        - apt-get install -yqq git libcurl4-gnutls-dev libxml2-dev libzip-dev libbz2-dev
+        # Install PHP extensions
+        - docker-php-ext-install curl ctype session json xml zip bz2 opcache tokenizer
+        # Install & enable Xdebug for code coverage reports
+        - pecl install xdebug
+        - docker-php-ext-enable xdebug
+        - echo -e "xdebug.mode=coverage" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+        # Install and run Composer
+        - curl -sS https://getcomposer.org/installer | php
+        - php composer.phar install
+    # Run our tests
+    # If Xdebug was installed you can generate a coverage report and see code coverage metrics.
+    script:
+        - ./vendor/bin/phpunit --configuration phpunit.xml.dist --coverage-text --colors=never --coverage-html=coverage
+
+    artifacts:
+        paths:
+            - coverage
+        expire_in: 7 days
+
+    only:
+        - merge_requests
+        - develop
+        - master
+
+# This file is a template, and might need editing before it works on your project.
+# Publishes a tag/branch to Composer Packages of the current project
+publish:
+    image: curlimages/curl:latest
+    stage: build
+    variables:
+        URL: "$CI_SERVER_PROTOCOL://$CI_SERVER_HOST:$CI_SERVER_PORT/api/v4/projects/$CI_PROJECT_ID/packages/composer?job_token=$CI_JOB_TOKEN"
+    script:
+        - version=$([[ -z "$CI_COMMIT_TAG" ]] && echo "branch=$CI_COMMIT_REF_NAME" || echo "tag=$CI_COMMIT_TAG")
+        - insecure=$([ "$CI_SERVER_PROTOCOL" = "http" ] && echo "--insecure" || echo "")
+        - response=$(curl -s -w "\n%{http_code}" $insecure --data $version $URL)
+        - code=$(echo "$response" | tail -n 1)
+        - body=$(echo "$response" | head -n 1)
+        # Output state information
+        - if [ $code -eq 201 ]; then
+            echo "Package created - Code $code - $body";
+            else
+            echo "Could not create package - Code $code - $body";
+            exit 1;
+            fi
+    only:
+        - tags
+        - master
+
+

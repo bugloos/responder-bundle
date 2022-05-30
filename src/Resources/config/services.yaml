@@ -1,0 +1,10 @@
+services:
+    Bugloos\ResponderBundle\Service\Paginator:
+        public: true
+        autowire: true
+        arguments:
+            $paginatorHandler: '@Bugloos\ResponderBundle\PaginatorHandler\Pagerfanta\PagerfantaHandler'
+            $defaultMaxItemsPerPage: '%default_max_items_per_page%'
+            $defaultItemsPerPage: '%default_items_per_page%'
+
+    Bugloos\ResponderBundle\PaginatorHandler\Pagerfanta\PagerfantaHandler: ~
