@@ -29,4 +29,18 @@ class CustomQueryAdapter extends QueryAdapter
     {
         return $this->limit;
     }
+
+    public function getSlice($offset, $length): iterable
+    {
+        if ($this->existsMoreItemsThanLimitation($offset, $length)) {
+            $length = $this->getNbResults() - $offset;
+        }
+
+        return parent::getSlice($offset, $length);
+    }
+
+    private function existsMoreItemsThanLimitation(int $offset, int $length): bool
+    {
+        return $this->getNbResults() < $offset + $length;
+    }
 }
