@@ -23,7 +23,7 @@
     },
     "require": {
         "php": ">=7.4",
-        "symfony/framework-bundle": "^4.4 | ^5.4",
+        "symfony/framework-bundle": "^4.4 | ^5.4 | ^6.0",
         "pagerfanta/pagerfanta": "^3.6"
     },
     "require-dev": {
