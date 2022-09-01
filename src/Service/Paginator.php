@@ -117,16 +117,19 @@ class Paginator
         return (int) $this->request->query->get('itemsPerPage', $this->defaultItemsPerPage);
     }
 
+    private function count(): int
+    {
+        return $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
+            $this->paginatorHandler->count() : 0;
+    }
+
     private function getResult(): array
     {
-        $count = $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
-            $this->paginatorHandler->count() : 0;
-
         return [
             'pagination' => [
                 'totalPages' => $this->paginatorHandler->totalPages(),
                 'totalItems' => $this->paginatorHandler->totalItems(),
-                'count' => $count,
+                'count' => $this->count(),
                 'itemsPerPage' => $this->paginatorHandler->numberOfItemsPerPage(),
                 'page' => $this->getRequestedPageNumber(),
             ],
