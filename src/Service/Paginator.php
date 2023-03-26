@@ -16,6 +16,10 @@ class Paginator
 
     private int $defaultItemsPerPage;
 
+    private string $pageKeyInRequest;
+
+    private string $itemsPerPageKeyInRequest;
+
     private ?int $limit = null;
 
     private Request $request;
@@ -27,11 +31,15 @@ class Paginator
     public function __construct(
         PaginatorHandlerInterface $paginatorHandler,
         int $defaultMaxItemsPerPage,
-        int $defaultItemsPerPage
+        int $defaultItemsPerPage,
+        string $pageKeyInRequest,
+        string $itemsPerPageKeyInRequest
     ) {
         $this->paginatorHandler = $paginatorHandler;
         $this->defaultMaxItemsPerPage = $defaultMaxItemsPerPage;
         $this->defaultItemsPerPage = $defaultItemsPerPage;
+        $this->pageKeyInRequest = $pageKeyInRequest;
+        $this->itemsPerPageKeyInRequest = $itemsPerPageKeyInRequest;
     }
 
     public function for(Request $request): self
@@ -103,7 +111,7 @@ class Paginator
 
     private function getRequestedPageNumber(): int
     {
-        return (int) $this->request->query->get('page', 1);
+        return (int) $this->request->query->get($this->pageKeyInRequest, 1);
     }
 
     private function collection()
@@ -114,7 +122,7 @@ class Paginator
 
     private function getRequestedItemPerPage(): int
     {
-        return (int) $this->request->query->get('itemsPerPage', $this->defaultItemsPerPage);
+        return (int) $this->request->query->get($this->itemsPerPageKeyInRequest, $this->defaultItemsPerPage);
     }
 
     private function count(): int

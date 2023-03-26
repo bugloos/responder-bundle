@@ -6,5 +6,7 @@ services:
             $paginatorHandler: '@Bugloos\ResponderBundle\PaginatorHandler\Pagerfanta\PagerfantaHandler'
             $defaultMaxItemsPerPage: '%default_max_items_per_page%'
             $defaultItemsPerPage: '%default_items_per_page%'
+            $pageKeyInRequest: '%page_key_in_request%'
+            $itemsPerPageKeyInRequest: '%items_per_page_key_in_request%'
 
     Bugloos\ResponderBundle\PaginatorHandler\Pagerfanta\PagerfantaHandler: ~

@@ -26,11 +26,14 @@ class ResponderExtension extends Extension
 
         $container->setParameter('default_max_items_per_page', $config['default_max_items_per_page']);
         $container->setParameter('default_items_per_page', $config['default_items_per_page']);
+        $container->setParameter('page_key_in_request', $config['page_key_in_request']);
+        $container->setParameter('items_per_page_key_in_request', $config['items_per_page_key_in_request']);
 
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
         );
+
         $loader->load('services.yaml');
     }
 
