@@ -31,6 +31,15 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('default_items_per_page')
                     ->defaultValue(20)
                 ->end()
+                ->scalarNode('page_key_in_request')
+                    ->defaultValue('page')
+                ->end()
+                ->scalarNode('items_per_page_key_in_request')
+                    ->defaultValue('itemsPerPage')
+                ->end()
+                ->scalarNode('paginator_response')
+                    ->defaultValue('Bugloos\ResponderBundle\Service\DefaultPaginatorResponse')
+                ->end()
             ->end();
 
         return $treeBuilder;

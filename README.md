@@ -15,5 +15,5 @@ composer require bugloos/responder-bundle
 
 <h2>Compatibility</h2>
 
-* PHP v7.4 or above
+* PHP v8.0 or above
 * Symfony v4.4 or above
