@@ -3,7 +3,7 @@
 namespace Bugloos\ResponderBundle\Service;
 
 use Bugloos\ResponderBundle\PaginatorHandler\Contract\PaginatorHandlerInterface;
-class DefaultPaginatorResponse implements PaginationResponseInterface
+class DefaultPaginatorResponse implements PaginatorResponseInterface
 {
     public function getResult(PaginatorHandlerInterface $paginatorHandler, Paginator $paginator): array
     {

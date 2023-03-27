@@ -86,8 +86,6 @@ trait ApiResponseHelper
             ->respondWithMessage($message, $headers);
     }
 
-    /** Legacy functionas - start */
-
     /**
      * @deprecated since Responder Bundle v1.0.0, use respondWithSucess() instead
      */
@@ -175,8 +173,6 @@ trait ApiResponseHelper
         return $this->setStatusCode(Response::HTTP_OK)
             ->respondWithMessage($message, $headers);
     }
-
-    /** Legacy functionas - end */
 
     private function setStatusCode(int $statusCode): self
     {
