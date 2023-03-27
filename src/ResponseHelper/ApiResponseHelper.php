@@ -60,7 +60,7 @@ trait ApiResponseHelper
 
     /** new functions - start */
 
-    protected function respondWithSucess(
+    protected function respondWithSuccess(
         array|object $data,
         array $groups= [],
         array $headers = []
@@ -87,7 +87,7 @@ trait ApiResponseHelper
     }
 
     /**
-     * @deprecated since Responder Bundle v1.0.0, use respondWithSucess() instead
+     * @deprecated since Responder Bundle v1.0.0, use respondWithSuccess() instead
      */
     protected function respondWithItem(
         $item,
@@ -95,14 +95,14 @@ trait ApiResponseHelper
         array $headers = []
     ): JsonResponse {
 
-        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSucess()" instead.', __METHOD__);
+        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSuccess()" instead.', __METHOD__);
 
         return $this->setStatusCode(Response::HTTP_OK)
             ->respond($item, $groups, $headers);
     }
 
     /**
-     * @deprecated since Responder Bundle v1.0.0, use respondWithSucess() instead
+     * @deprecated since Responder Bundle v1.0.0, use respondWithSuccess() instead
      */
     protected function respondWithCollection(
         $collection,
@@ -110,14 +110,14 @@ trait ApiResponseHelper
         array $headers = []
     ): JsonResponse {
 
-        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSucess()" instead.', __METHOD__);
+        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSuccess()" instead.', __METHOD__);
 
         return $this->setStatusCode(Response::HTTP_OK)
             ->respond($collection, $groups, $headers);
     }
 
     /**
-     * @deprecated since Responder Bundle v1.0.0, use respondWithSucess() instead
+     * @deprecated since Responder Bundle v1.0.0, use respondWithSuccess() instead
      */
     protected function respondWithPagination(
         $pagination,
@@ -125,21 +125,21 @@ trait ApiResponseHelper
         array $headers = []
     ): JsonResponse {
 
-        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSucess()" instead.', __METHOD__);
+        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSuccess()" instead.', __METHOD__);
 
         return $this->setStatusCode(Response::HTTP_OK)
             ->respond($pagination, $groups, $headers);
     }
 
     /**
-     * @deprecated since Responder Bundle v1.0.0, use respondWithSucessMessage() instead
+     * @deprecated since Responder Bundle v1.0.0, use respondWithSuccessMessage() instead
      */
     protected function respondItemUpdated(
         $message,
         array $headers = []
     ): JsonResponse {
 
-        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSucessMessage()" instead.', __METHOD__);
+        trigger_deprecation('bugloos/responder-bundle', '1.0.0', 'The "%s()" method is deprecated, use "respondWithSuccessMessage()" instead.', __METHOD__);
 
         return $this->setStatusCode(Response::HTTP_OK)
             ->respondWithMessage($message, $headers);
