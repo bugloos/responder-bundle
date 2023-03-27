@@ -24,18 +24,20 @@ class Paginator
 
     private Request $request;
 
-    private $customResultDecorator;
-
     private PaginatorHandlerInterface $paginatorHandler;
+
+    private PaginatorResponseInterface $paginatorResponse;
 
     public function __construct(
         PaginatorHandlerInterface $paginatorHandler,
+        PaginatorResponseInterface $paginatorResponse,
         int $defaultMaxItemsPerPage,
         int $defaultItemsPerPage,
         string $pageKeyInRequest,
         string $itemsPerPageKeyInRequest
     ) {
         $this->paginatorHandler = $paginatorHandler;
+        $this->paginatorResponse = $paginatorResponse;
         $this->defaultMaxItemsPerPage = $defaultMaxItemsPerPage;
         $this->defaultItemsPerPage = $defaultItemsPerPage;
         $this->pageKeyInRequest = $pageKeyInRequest;
@@ -63,35 +65,35 @@ class Paginator
         return $this;
     }
 
-    public function setCustomResultDecorator(callable $callable): self
-    {
-        $this->customResultDecorator = $callable;
-
-        return $this;
-    }
-
-    /**
-     * @param Query|QueryBuilder $query
-     * @param array $options
-     *
-     * @return array
-     */
-    public function paginate($query, array $options = []): array
+    public function paginate(object $query, array $options = []): iterable
     {
         $this->paginatorHandler->initializePaginatorHandler($query, $this->limit, $options);
 
         $this->applyRequestOnPaginatorHandler();
 
-        if ($this->hasCustomResultDecorator()) {
-            return call_user_func($this->customResultDecorator, $this->paginatorHandler);
-        }
-
-        return $this->getResult();
+        return $this->paginationResponse->getResult($this->paginatorHandler, $this);
     }
 
-    private function hasCustomResultDecorator(): bool
+    public function getRequestedPageNumber(): int
     {
-        return is_callable($this->customResultDecorator);
+        return (int) $this->request->query->get($this->pageKeyInRequest, 1);
+    }
+
+    public function collection(): iterable
+    {
+        return $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
+            $this->paginatorHandler->getCurrentPageResults() : [];
+    }
+
+    public function getRequestedItemPerPage(): int
+    {
+        return (int) $this->request->query->get($this->itemsPerPageKeyInRequest, $this->defaultItemsPerPage);
+    }
+
+    public function count(): int
+    {
+        return $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
+            $this->paginatorHandler->count() : 0;
     }
 
     private function getNormalizedItemsPerPage(): int
@@ -107,41 +109,5 @@ class Paginator
         if ($this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages()) {
             $this->paginatorHandler->setCurrentPage($this->getRequestedPageNumber());
         }
-    }
-
-    private function getRequestedPageNumber(): int
-    {
-        return (int) $this->request->query->get($this->pageKeyInRequest, 1);
-    }
-
-    private function collection()
-    {
-        return $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
-            $this->paginatorHandler->getCurrentPageResults() : [];
-    }
-
-    private function getRequestedItemPerPage(): int
-    {
-        return (int) $this->request->query->get($this->itemsPerPageKeyInRequest, $this->defaultItemsPerPage);
-    }
-
-    private function count(): int
-    {
-        return $this->getRequestedPageNumber() <= $this->paginatorHandler->totalPages() ?
-            $this->paginatorHandler->count() : 0;
-    }
-
-    private function getResult(): array
-    {
-        return [
-            'pagination' => [
-                'totalPages' => $this->paginatorHandler->totalPages(),
-                'totalItems' => $this->paginatorHandler->totalItems(),
-                'count' => $this->count(),
-                'itemsPerPage' => $this->paginatorHandler->numberOfItemsPerPage(),
-                'page' => $this->getRequestedPageNumber(),
-            ],
-            'data' => $this->collection(),
-        ];
     }
 }

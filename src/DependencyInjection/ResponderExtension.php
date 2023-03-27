@@ -29,6 +29,11 @@ class ResponderExtension extends Extension
         $container->setParameter('page_key_in_request', $config['page_key_in_request']);
         $container->setParameter('items_per_page_key_in_request', $config['items_per_page_key_in_request']);
 
+        $container->setAlias(
+            'paginator_response',
+            $config['paginator_response']
+        )->setPublic(true);
+
         $loader = new YamlFileLoader(
             $container,
             new FileLocator(__DIR__.'/../Resources/config')
