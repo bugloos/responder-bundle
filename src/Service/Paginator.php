@@ -71,7 +71,7 @@ class Paginator
 
         $this->applyRequestOnPaginatorHandler();
 
-        return $this->paginationResponse->getResult($this->paginatorHandler, $this);
+        return $this->paginatorResponse->getResult($this->paginatorHandler, $this);
     }
 
     public function getRequestedPageNumber(): int
