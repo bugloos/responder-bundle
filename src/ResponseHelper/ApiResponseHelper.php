@@ -58,10 +58,8 @@ trait ApiResponseHelper
             ->respondWithMessage($message, $headers);
     }
 
-    /** new functions - start */
-
     protected function respondWithSuccess(
-        array|object $data,
+        iterable|object $data,
         array $groups= [],
         array $headers = []
     ): JsonResponse {
